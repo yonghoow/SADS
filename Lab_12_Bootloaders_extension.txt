@@ -1,0 +1,8 @@
+after "quiet" rd.break
+Press Ctrl-X
+
+mount -oremount,rw /sysroot
+chroot /sysroot
+passwd root
+
+touch /.autorelabel

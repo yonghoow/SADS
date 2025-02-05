@@ -1,0 +1,167 @@
+A1. Install the httpd software package
+>yum install httpd
+
+A2. Start the httpd service and ensure that it is started automatially every time the system reboots.
+#systemctl enable httpd
+#systemctl start httpd
+
+Stop the sshd service now and ensure it is NOT started automatically every time the system reboots.
+#systemctl stop sshd
+#systemctl disable sshd
+
+A3. Create a user name "jenny" as follows:
+- she belongs to a primary group "secretary"
+- she belongs to two secondary groups "support" and "staff"
+- set her password to "P@ssw0rd1"
+#groupadd secretary
+#groupadd support
+#groupadd staff
+#useradd -g secretary -G support,staff jenny
+#passwd jenny
+#id jenny
+
+Create another user "jazzie" as follows:
+- she belongs to a primary group "staff"
+#useradd -g staff jazzie
+#id jazzie
+
+A4. Create a directory /practice-test3 and set permissions as follows:
+- Owner is jenny
+- Group owner is support
+- Permissions should be drwxrw-r--
+
+Create a file /practice-test3/textfile3.txt and set the permission as follows:
+- Owner is jazzie
+- Group owner is staff
+- Permission should be -rw-rw-r--
+
+#mkdir /practice-test3
+#touch /practice-test3/testfile3.txt
+#chown jenny.support /practice-test3/
+#chown jazzie.staff /practice-test3/testfile3.txt   
+#chmod 764 /practice-test3
+#chmod 664 /practice-text3/testfile3.txt
+
+A5. Attach one additional hardisk 1GB
+1 /dev/sdb1 Primary  200MB    Linux      ext4 /mnt/sdb1 Defaults
+2 /dev/sdb2 Primary  250MB    Linux      ext4 /mnt/sdb2 Defaults
+3 /dev/sdb3 Primary  100MB    Linux swap swap -         Defaults
+4 /dev/sdb4 Extended Balance  -          -    -         -
+5 /dev/sdb5 Logical  300MB    Linux LVM  -    -         -
+6 /dev/sdb6 Logical  Balance  Linux LVM  -    -         -
+   
+
+#fdisk -l
+#fidsk -c /dev/sdb 
+#n
+#p
+#1
+#+200M
+
+#n
+#p
+#2
+#+250M
+
+#n
+#p
+#3
+#+100M
+#t
+#82
+#p (print the partitions so far)
+
+#n
+#e
+#4
+
+#n
+#+300M
+#t
+#8E
+
+#n
+#t
+#8E
+
+#p (prints partition so far)
+#w
+#partprobe
+#mkfs -t ext4 /dev/sdb1
+#mkfs -t ext4 /dev/sdb2
+#mkswap /dev/sdb3
+#mkdir /mnt/sdb1
+#mkdir /mnt/sdb2
+#vi /etc/fstab
+
+Add to /etc/fstab
+==================
+/dev/sdb1 /mnt/sdb1 ext4 defaults 0 0
+/dev/sdb2 /mnt/sdb1 ext4 defaults 0 0
+/dev/sdb3 swap swap defaults 0 0
+:w:q
+
+#systemctl daemon-reload
+#mount -a
+#swapon -a
+#lsblk
+
+A6. Logical Volume Manager
+-create LVM volume group named vg1 from the 2 Linux LVM partition size 8MB
+-create logical volume named lv1 with the size of 30 physical extends
+-create an ext4 file system on lv1
+-Mount the new file system at /mnt/lv1 persistently
+#pvcreate /dev/sdb5 /dev/sdd6
+#vgcreate vg1 -s 8M /dev/sdb5 /dev/sdb6
+#lvcreate -n lv1 -l 30 /dev/vg1
+#lvdisplay (take note of LV PATH)
+#mkfs -t ext4 /dev/vg1/lv1
+
+#mkdir /mnt/lv1
+#vi /etc/fstab
+
+Add in /etc/fstab
+==================
+/dev/vg1/lv1 /mnt/lv1 ext4 defaults 0 0
+:wq
+
+#systemctl daemon-reload
+#mount -a
+#lsblk (show what has been done)
+
+A7. If the umask is 025, write down permission of the new file and directory created.
+#umask 
+#umask 025
+#mask (to check)
+#mkdir testdir
+#touch testfile
+#ls -ld test*
+#umask 022
+
+A8. 
+-Schedule a system cron job that runs every wed at 11:45pm using "jenny" account. The cronjob creates a bzip2 tar archive (filename ~/DDMMYY-home.tar.bz2).
+-schedule a system cron job that appends date and time to /tmp/share/cron-output.txt every 1st day of the month runnung as root account.
+
+#vi /etc/crontab
+
+add in /etc/crontab
+===================
+45 23 * * wed jenny tar -cjf /home/jenny/$(date \+\%d\%m\%y)-home.tar.bz2 /home/jenny
+*/1 * * * *  jenny tar -cjf /home/jenny/$(date \+\%d\%m\%y)-home.tar.bz2 /home/jenny (test every min)
+* 0 1 * * root echo $(date) >> /tmp/share/cron-output.txt
+:w:q
+
+#watch ls -l /home/jenny
+
+
+
+
+
+ 
+
+
+
+
+
+
+

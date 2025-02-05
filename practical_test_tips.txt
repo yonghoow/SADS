@@ -1,0 +1,6 @@
+LVM & partitioning
+add harddisk to virtual box
+
+Week 14 and 15 not in the test.
+SADS mock practical test in wk 15 folder.
+
