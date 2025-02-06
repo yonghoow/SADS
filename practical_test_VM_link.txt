@@ -1,3 +1,0 @@
-https://drive.google.com/file/d/1jQEjlz3vtTWxksMjKcFCWQ6mTFLK5PhF/view?usp=sharing
-
-IMPORT THE VM -> POWER UP -> CHECK THAT IT BOOTS INTO THE LOGIN SCREEN (NO LOGIN REQUIRED) -> POWER DOWN.
