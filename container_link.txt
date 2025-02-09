@@ -23,4 +23,4 @@ sudo systemctl start docker
 sudo systemctl status docker
 sudo docker start student-web
 
-Use host-only adapter for VM
+Use bridged adapter for VM
